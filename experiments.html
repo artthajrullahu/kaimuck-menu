@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f1e9d4" />
+  <title>kaimuck · logo experiments</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,
+    %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E
+      %3Crect width='64' height='64' rx='14' fill='%231a1612'/%3E
+      %3Ccircle cx='32' cy='32' r='14' fill='%23d4612f'/%3E
+    %3C/svg%3E" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Theme switcher panel */
+    .theme-switcher {
+      position: fixed;
+      top: 12px; right: 12px;
+      z-index: 200;
+      background: #1a1612;
+      color: #f3ede1;
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      max-width: 220px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    .theme-switcher .label {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin: 0 4px 8px;
+    }
+    .theme-switcher .opts {
+      display: grid; gap: 4px;
+    }
+    .theme-switcher button {
+      font-family: inherit;
+      background: transparent;
+      color: inherit;
+      border: 1px solid rgba(243,237,225,0.2);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .12s, color .12s;
+    }
+    .theme-switcher button:hover { background: rgba(243,237,225,0.08); }
+    .theme-switcher button.is-active {
+      background: #d4612f;
+      color: #1a1612;
+      border-color: #d4612f;
+    }
+    .theme-switcher .note {
+      font-size: 10px;
+      opacity: 0.5;
+      margin: 8px 4px 0;
+      line-height: 1.4;
+    }
+    @media (max-width: 480px) {
+      .theme-switcher { top: auto; bottom: 12px; right: 12px; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+
+<aside class="theme-switcher" id="switcher">
+  <div class="label">logo bg · pick one</div>
+  <div class="opts" id="opts"></div>
+  <div class="note">scroll the page to feel each one in context.</div>
+</aside>
+
+<main>
+  <header>
+    <img src="assets/kaimuck-logo.png" alt="kaimuck" />
+    <p class="tagline" id="hero">tap a tag. tell our barista. magic happens.</p>
+  </header>
+
+  <nav class="filters" id="filters" aria-label="menu categories"></nav>
+  <section class="wall" id="wall" aria-label="menu items"></section>
+
+  <footer>
+    <div class="hours" id="hours">MADE WITH MILK · MON–SUN · 08:00–00:00</div>
+    <div class="secret-note" id="secret-note">
+      ps: ask the barista about today’s off-menu pour. they made it just for you. probably.
+    </div>
+  </footer>
+</main>
+
+<script src="menu-data.js"></script>
+<script src="menu.js"></script>
+
+<script>
+  // Theme switcher logic
+  const THEMES = [
+    { id: "",          name: "clean",      desc: "no logo background" },
+    { id: "pattern",   name: "pattern",    desc: "tiled diagonal mini-logos" },
+    { id: "watermark", name: "watermark",  desc: "one huge faded logo behind everything" },
+    { id: "marquee",   name: "marquee",    desc: "scrolling kaimuck strip top + bottom" },
+    { id: "chapters",  name: "chapters",   desc: "logo between categories (use ‘all’ filter)" },
+    { id: "stamp",     name: "stamp",      desc: "giant kaimuck stamp at end" },
+    { id: "tag-ghost", name: "tag ghost",  desc: "tiny faded logo on every cream tag" },
+    { id: "combo",     name: "combo",      desc: "marquee + stamp + faint watermark" },
+  ];
+
+  const opts = document.getElementById("opts");
+  const saved = localStorage.getItem("kaimuck-theme") || "";
+
+  function setTheme(id) {
+    if (id) document.body.dataset.theme = id;
+    else delete document.body.dataset.theme;
+    localStorage.setItem("kaimuck-theme", id);
+    [...opts.children].forEach((b) => {
+      b.classList.toggle("is-active", b.dataset.id === id);
+    });
+  }
+
+  for (const t of THEMES) {
+    const b = document.createElement("button");
+    b.dataset.id = t.id;
+    b.innerHTML = `<div>${t.name}</div><div style="opacity:.55;font-weight:400;font-size:10px;margin-top:2px">${t.desc}</div>`;
+    b.addEventListener("click", () => setTheme(t.id));
+    opts.appendChild(b);
+  }
+  setTheme(saved);
+</script>
+
+</body>
+</html>
