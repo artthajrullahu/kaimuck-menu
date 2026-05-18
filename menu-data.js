@@ -14,8 +14,8 @@ window.MENU = {
 
   categories: [
     {
-      id: "kafet",
-      name: "kafet",
+      id: "coffee",
+      name: "coffee",
       sub: "the classics, brewed loud",
       items: [
         { n: "espresso",              d: "the official wake-up call",        p: 70  },
